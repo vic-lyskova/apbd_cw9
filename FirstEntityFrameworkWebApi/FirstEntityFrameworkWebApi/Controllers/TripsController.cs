@@ -17,8 +17,17 @@ public class TripsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetTrips()
     {
-        var trips = await _context.Trips.ToListAsync();
-        
+        // var trips = await _context.Trips.ToListAsync();
+
+        var trips = await _context.Trips.Select(t => new
+        {
+            Name = t.Name,
+            Countrie = t.IdCountries.Select(c => new
+            {
+                Name = c.Name
+            })
+        }).ToListAsync();
+
         return Ok(trips);
     }
 }
